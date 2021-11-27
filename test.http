@@ -1,0 +1,13 @@
+GET http://localhost:5000/posts
+
+
+###
+POST http://localhost:5000/posts
+Content-Type: application/json
+
+{
+    "title":"Title",
+    "message":"New post",
+    "creator": "God",
+    "tags": ["tag1", "tag2"]
+}
