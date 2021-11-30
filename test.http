@@ -11,3 +11,9 @@ Content-Type: application/json
     "creator": "God",
     "tags": ["tag1", "tag2"]
 }
+
+###
+PATCH http://localhost:5000/posts/61a2430122c211415b47a92c/likePost
+
+###
+DELETE http://localhost:5000/posts/61a347793455c5b33a541bc9/deletePost
