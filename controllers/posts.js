@@ -4,7 +4,6 @@ import postMessage from "../models/postMessage.js"
 export const getPosts = async (req,res)=>{
     try {
         const postMessages = await postMessage.find()
-        console.log(postMessages);
         res.status(200).json(postMessages)
     } catch (error) {
         res.status(404).json({message: error.message})
@@ -27,8 +26,8 @@ export const likePost = async(req,res) =>{
     const {id} = req.params
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`)
     const post = await postMessage.findById(id)
-    const updatedPost = await postMessage.findByIdAndUpdate(id, { likeCount: post.likeCount + 1 }, { new: true }); 
-    res.json(updatedPost)
+    const updatedPost = await postMessage.findByIdAndUpdate(id, { likeCount: post.likeCount + 1 }, { new: true });
+    res.status(200).json(updatedPost)
 }
 
 export const deletePost = async(req,res) =>{
