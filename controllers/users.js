@@ -10,7 +10,7 @@ export const signUp = async (req,res) =>{
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
     try {
         const newUser = new user({name: req.body.name, email:req.body.email ,password: hashedPassword})
-        const accessToken = jwt.sign({id: newUser._id, name: newUser.name}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "1h"})
+        const accessToken = jwt.sign({id: newUser._id, name: newUser.name}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "30m"})
         const refreshToken = jwt.sign({id: newUser._id, name: newUser.name}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: "4w"})
         newUser.refreshToken = refreshToken
         await newUser.save()
@@ -25,7 +25,7 @@ export const logIn = async (req,res) =>{
         const currentUser = await user.findOne({email})
         let match = await bcrypt.compare(password, currentUser.password)
         if (!match) return res.status(403).json({message: "Wrong auth data"})
-        const accessToken = jwt.sign({id: currentUser._id, name: currentUser.name}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "5s"})
+        const accessToken = jwt.sign({id: currentUser._id, name: currentUser.name}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "5m"})
         const refreshToken = jwt.sign({id: currentUser._id, name: currentUser.name}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: "4w"})
         currentUser.refreshToken = refreshToken
         await currentUser.save()
@@ -65,7 +65,7 @@ export const refresh = async (req,res) => {
         const currentUser = await user.findById(id)
         const isVerified = jwt.verify(currentUser.refreshToken,process.env.REFRESH_TOKEN_SECRET)      
         if (isVerified && (currentUser.refreshToken = token)) {
-            const accessToken = jwt.sign({id: currentUser._id, name: currentUser.name}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "5s"})
+            const accessToken = jwt.sign({id: currentUser._id, name: currentUser.name}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "5m"})
             return res.json(accessToken)
         }       
     }catch (error) {

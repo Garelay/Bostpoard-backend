@@ -16,6 +16,7 @@ const postSchema = new mogoose.Schema({
         type: String,
         default: "default"
     },
+    likedPosts: [String],
     refreshToken:{
         type: String
     },
